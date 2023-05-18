@@ -3,33 +3,32 @@ int ID;
 
 int main() {
     setlocale (LC_ALL, "rus");
-    system("cls");
+    system("clear");
     cout<<"\t\t\t ------------------------------------------------------------------------"<<endl;
-	cout<<"\t\t\t|                Добро пожаловать в Ваш личный ToDo List                 |"<<endl;
+	cout<<"\t\t\t|                   Welcome to your Personal ToDo List                   |"<<endl;
     cout<<"\t\t\t ------------------------------------------------------------------------"<<endl;
-    cout<<"beta (works only with eng lang)";
 
-    ifstream read; //создание объекта для чтения данных из файла.
-    read.open("id.txt"); //открытие файла "id.txt" для чтения
+    ifstream read; 
+    read.open("id.txt"); 
 
-    //проверка на успешное открытие
+
     if (!read.fail()) { 
-        read >> ID; //чтение значения переменной ID из файла
+        read >> ID; 
     }
     else {
         ID = 0;
     }
-    read.close(); //закрытие файла
+    read.close(); 
 
     while (true) {
         cout<<endl<<endl;
-        cout << "\n\t1.Добавить заметку";
-        cout << "\n\t2.Просмотреть заметки";
-        cout << "\n\t2.Изменить заметку";
-        cout << "\n\t4.Выход";
+        cout << "\n\t1.Add new note";
+        cout << "\n\t2.View notes";
+        cout << "\n\t3.Edit note";
+        cout << "\n\t4.Exit";
 
         int choice;
-        cout << "\n\tВаш выбор : ";
+        cout << "\n\tWhat do you want?  ";
         cin >> choice;
         switch (choice) {
         case 1:

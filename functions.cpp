@@ -1,31 +1,27 @@
-#include <iostream>
 #include "functions.h"
 extern int ID;
 
 void header () {
-	system("cls");
+	system("clear");
     cout<<"\t\t\t ------------------------------------------------------------------------"<<endl;
-	cout<<"\t\t\t|                          Ваш личный ToDo List                          |"<<endl;
+	cout<<"\t\t\t|                        Your Personal ToDo List                         |"<<endl;
     cout<<"\t\t\t ------------------------------------------------------------------------"<<endl<<endl;
 }
 
-//добавление новой заметки
 void addtodo() {
 	header ();
     todo todo;
-    cout << "\n\tВведите новую заметку: ";
+    cout << "\n\tEnter new task: ";
     cin.get();
-    getline(cin, todo.task); //ввод пользователя
-    ID++; //увеличиваем номер для текущей заметки
+    getline(cin, todo.task); 
+    ID++; 
 
-    //запись заметок в файл
     ofstream write;
     write.open("todo.txt", ios::app);
     write << "\n" << ID;
     write << "\n" << todo.task ;
     write.close();
 
-    //записываем номера заметок в отдельный файл для последующего добавления новых заметок
     write.open("id.txt");
     write << ID;
     write.close();
@@ -34,83 +30,80 @@ void addtodo() {
     cout<<"Do you want to add another? y/n"<<endl;
     cin>> ch;
 
-    //на случай, если пользователь захочет добавить несколько заметок
     if(ch == 'y'){
         addtodo();
     }
     else{
-        cout << "\n\tЗаметка добавлена!";
+        cout << "\n\tNote added!";
         return;
     }
 }
 
-// вывод заметок на экран
+
 void print(todo s) {
-    cout << "\n\tID is : " << s.id;
-    cout << "\n\tTask is : " << s.task;
+    cout << "\n\t" << s.id << "." << s.task;
 }
 
-//чтение заметок из файла
+
 void readData() {
-    header ();
+    system("clear");
     todo todo;
     ifstream read; 
-    read.open("todo.txt");//объект для чтения из файла
-    cout << "\n\t-------------------------Ваши текущие заметки--------------------------";
-    // чтение из файла происходит до тех пор, пока не достигнут конец файла
+    read.open("todo.txt");
+    cout << "\n\t\t\t-----------------------------Current notes------------------------------\n\n\n";
+    
     while (!read.eof()) {
-        read >> todo.id; //чтение значения номера заметки из файла в структуру
-        read.ignore(); //игнорирование первого символа строки файла
-        getline(read, todo.task); //чтение заметки из файла
-        print(todo); //вывод структуры
+        read >> todo.id; 
+        read.ignore(); 
+        getline(read, todo.task); 
+        print(todo); 
     }
-    read.close(); //закрытие файла
+    read.close();
 }
 
 int searchData() {
     header ();
-    int id; //переменная для хранения номера заметки
+    int id; 
     cout << "\n\tEnter task id: ";
-    cin >> id; //пользователь вводит номер заметки
+    cin >> id; 
     todo todo;
     ifstream read;
-    read.open("todo.txt"); //объект для чтения из файла
-    //пока не достигли конца ищем id, введённый пользователем
+    read.open("todo.txt"); 
+    
     while (!read.eof()) {
-        read >> todo.id; //чтение значения номера заметки из файла в структуру
-        read.ignore(); //игнорирование первого символа строки файла
-        getline(read, todo.task); //чтение заметки из файла
+        read >> todo.id; 
+        read.ignore(); 
+        getline(read, todo.task); 
         if (todo.id == id) {
-            print(todo); //если нашли нужный номер, то выводим заметку
-            return id; //возвращаем найденный номер заметки
+            print(todo); 
+            return id; 
         }
     }
+    //return 0;
 }
 
 void updateData() {
     header ();
-    int id = searchData(); //ищем номер заметки
-    cout << "\n\tВы хотите изменить эту заметку (y/n) : ";
+    int id = searchData(); 
+    cout << "\n\tDo you want to update this note? (y/n) : ";
     char choice;
     cin >> choice;
     if (choice == 'y') {
-        todo newData; //создание новой переменной типа todo, которая будет хранить новые данные для заметки
-        cout << "\n\tВведите заметку : ";
+        todo newData; 
+        cout << "\n\tEnter note : ";
         cin.get(); 
-        getline(cin, newData.task); //ввод заметки
+        getline(cin, newData.task); 
         todo todo;
         ofstream tempFile;
-        tempFile.open("temp.txt"); //запись обновленных данных в временный файл
+        tempFile.open("temp.txt"); 
         ifstream read;
-        read.open("todo.txt"); //запись обновленных данных в постоянный файл
-        //пока не достигли конца ищем id, введённый пользователем
+        read.open("todo.txt"); 
+        
         while (!read.eof()) {
-            read >> todo.id;//чтение значения номера заметки из файла в структуру
-            read.ignore(); //игнорирование первого символа строки в файле
-            getline(read, todo.task);//чтение заметки из файла
-            //проверка на совпадение номеров заметки
-            //если условие выполняется, то записываем в временный файл
-            //иначе то строка задачи заменяется на новую строку и записывается в временный файл
+            read >> todo.id;
+            read.ignore(); 
+            getline(read, todo.task);
+            
             if (todo.id != id) {
                 tempFile << "\n" << todo.id;
                 tempFile << "\n" << todo.task;
@@ -120,14 +113,14 @@ void updateData() {
                 tempFile << "\n"<< newData.task;
             }
         }
-        read.close(); //закрываем исходный файл
-        tempFile.close(); //закрываем временный файл
-        remove("todo.txt"); //удаляем исходный файд
-        rename("temp.txt", "todo.txt"); //переименовываем временный в исходный
-        cout << "\n\tЗаметка успешна обновлена!";
+        read.close(); 
+        tempFile.close();
+        remove("todo.txt");
+        rename("temp.txt", "todo.txt"); 
+        cout << "\n\tSuccessfully updated note!";
     }
     else {
-        cout << "\n\tЗапись не удалена";
+        cout << "\n\tNote not updated";
     }
 }
 
