@@ -1,23 +1,62 @@
 #include "functions.h"
 extern int ID;
 
-void header () {
+const char* output = "todo.txt";
+const char* temp_output = "temp.txt";
+
+void header (int n) {
 	system("clear");
-    cout<<"\t\t\t ------------------------------------------------------------------------"<<endl;
-	cout<<"\t\t\t|                        Your Personal ToDo List                         |"<<endl;
-    cout<<"\t\t\t ------------------------------------------------------------------------"<<endl<<endl;
+    if (n == 0) {
+        cout<<"\t\t\t ------------------------------------------------------------------------"<<endl;
+	    cout<<"\t\t\t|              Добро пожаловать в Ваш Персональный ToDo List             |"<<endl;
+        cout<<"\t\t\t ------------------------------------------------------------------------"<<endl;
+
+    }
+    if (n == 1) {
+        system("clear");
+        cout << "\t\t\t ------------------------------------------------------------------------" << endl;
+        cout << "\t\t\t|                      Ваш персональный ToDo List                        |" << endl;
+        cout << "\t\t\t ------------------------------------------------------------------------" << endl << endl;
+    }
+    if (n == 2) {
+        header (1);
+        cout << "\n\tВведите новую заметку: ";
+    }
+    if (n == 3) {
+        header (1);
+        cout << "\n\tВведите номер задачи: ";
+    }
+    if (n == 4) {
+        system("clear");
+        cout << "\n\t\t\t---------------------------Текущие задачи-----------------------------\n";
+    }
 }
 
+
+void addtodo_user_choice () {
+    string ch;
+    cout << "Хотите добавить ещё? (д/н)" << endl;
+    cin >> ch;
+
+    if(ch == "д" or "да"){
+        header (2);
+        addtodo();
+    }
+    else{
+        cout << "\n\tЗаметка добавлена!";
+        return;
+    }
+}
+
+
 void addtodo() {
-	header ();
     todo todo;
-    cout << "\n\tEnter new task: ";
     cin.get();
     getline(cin, todo.task); 
     ID++; 
 
     ofstream write;
-    write.open("todo.txt", ios::app);
+    write.open(output, ios::app);
     write << "\n" << ID;
     write << "\n" << todo.task ;
     write.close();
@@ -26,17 +65,7 @@ void addtodo() {
     write << ID;
     write.close();
 
-    char ch;
-    cout<<"Do you want to add another? y/n"<<endl;
-    cin>> ch;
-
-    if(ch == 'y'){
-        addtodo();
-    }
-    else{
-        cout << "\n\tNote added!";
-        return;
-    }
+    addtodo_user_choice ();
 }
 
 
@@ -46,11 +75,9 @@ void print(todo s) {
 
 
 void readData() {
-    system("clear");
     todo todo;
     ifstream read; 
-    read.open("todo.txt");
-    cout << "\n\t\t\t-----------------------------Current notes------------------------------\n\n\n";
+    read.open(output);
     
     while (!read.eof()) {
         read >> todo.id; 
@@ -61,14 +88,13 @@ void readData() {
     read.close();
 }
 
+
 int searchData() {
-    header ();
     int id; 
-    cout << "\n\tEnter task id: ";
     cin >> id; 
     todo todo;
     ifstream read;
-    read.open("todo.txt"); 
+    read.open(output); 
     
     while (!read.eof()) {
         read >> todo.id; 
@@ -79,25 +105,25 @@ int searchData() {
             return id; 
         }
     }
-    //return 0;
+    return EXIT_CODE;
 }
 
 void updateData() {
-    header ();
     int id = searchData(); 
-    cout << "\n\tDo you want to update this note? (y/n) : ";
-    char choice;
-    cin >> choice;
-    if (choice == 'y') {
+    cout << "\n\tХотите изменить эту заметку? (д/н) : ";
+    string ch;
+    cin >> ch;
+    if (ch == "д") {
+        cout << "\n\tВведите новую заметку : ";
         todo newData; 
-        cout << "\n\tEnter note : ";
         cin.get(); 
         getline(cin, newData.task); 
+        
         todo todo;
         ofstream tempFile;
-        tempFile.open("temp.txt"); 
+        tempFile.open(temp_output); 
         ifstream read;
-        read.open("todo.txt"); 
+        read.open(output); 
         
         while (!read.eof()) {
             read >> todo.id;
@@ -115,12 +141,12 @@ void updateData() {
         }
         read.close(); 
         tempFile.close();
-        remove("todo.txt");
-        rename("temp.txt", "todo.txt"); 
-        cout << "\n\tSuccessfully updated note!";
+        remove(output);
+        rename(temp_output, output); 
+        cout << "\n\tЗаметка обновлена!";
     }
     else {
-        cout << "\n\tNote not updated";
+        cout << "\n\tЗаметка не обновлена";
     }
 }
 
