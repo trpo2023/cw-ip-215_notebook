@@ -10,4 +10,4 @@ functions.o: functions.cpp functions.h
 	g++ -c functions.cpp
      
 clean:
-	del main.o main.exe functions.o
+	rm main.o main.exe functions.o id.txt todo.txt
