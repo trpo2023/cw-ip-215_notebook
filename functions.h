@@ -13,6 +13,7 @@ extern int ID;
 struct todo {
     int id;
     string task;
+    string priority;
 };
 
 void header (int n);
@@ -20,5 +21,9 @@ void addtodo();
 void print (todo s);
 int searchData();
 void readData();
-void updateData();
+void updateData(string);
 void exit_program();
+void deltodo();
+void updatePriority();
+void clearAllData();
+void startMenu();

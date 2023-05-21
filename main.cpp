@@ -22,12 +22,14 @@ int main() {
     }
     read.close(); 
 
-    while (true) {
+    /*while (true) {
         cout << endl << endl;
         cout << "\n\t1.Добавить заметку";
         cout << "\n\t2.Просмотреть заметки";
         cout << "\n\t3.Изменить заметку";
-        cout << "\n\t4.Выход";
+        cout << "\n\t4.Удалить заметку";
+        cout << "\n\t5.Удалить все заметки";
+        cout << "\n\t6.Выход";
 
         int choice;
         cout << "\n\tЧто хотите сделать?  ";
@@ -46,8 +48,17 @@ int main() {
             updateData();
             break;
         case 4:
+            header (-1);
+            updateData();
+            break;
+        case 5:
+            header (-2);
+            updateData();
+            break;
+        case 6:
             exit_program();
             break;
         }
-    }
+    }*/
+    startMenu();
 }
