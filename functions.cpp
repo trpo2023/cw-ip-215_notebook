@@ -42,7 +42,8 @@ void addtodo_user_choice () {
         header (2);
         addtodo();
     }
-    else{
+    else
+    {
         cout << "\n\tЗаметка добавлена!";
         return;
     }
@@ -50,39 +51,55 @@ void addtodo_user_choice () {
 
 
 void addtodo() {
-    todo todo;
-    cin.get();
-    getline(cin, todo.task); 
-    ID++; 
+    string ch = "д";
+    while (ch == "д")
+    {
+        header (2);
+        todo todo;
+        cin.get();
+        getline(cin, todo.task); 
+        ID++; 
 
-    ofstream write;
-    write.open(output, ios::app);
-    write << "\n" << ID;
-    write << "\n" << todo.task ;
-    write.close();
+        ofstream write;
+        write.open(output, ios::app);
+        write << "\n" << ID;
+        write << "\n" << todo.task ;
+        write << "\n" << " не определён";
+        write.close();
 
-    write.open("id.txt");
-    write << ID;
-    write.close();
+        write.open("id.txt");
+        write << ID;
+        write.close();
 
-    addtodo_user_choice ();
+        cout << "Хотите добавить ещё? (д/н)" << endl;
+        cin >> ch;
+    }
+
+    /*addtodo_user_choice ();*/
 }
 
 
 void print(todo s) {
-    cout << "\n\t" << s.id << "." << s.task;
+    cout << "\n\t" << s.id << "." << s.task << "\n\tПриоритет: " << s.priority;
 }
 
 
 void readData() {
     todo todo;
-    ifstream read; 
+    ifstream read;
     read.open(output);
     
     while (!read.eof()) {
-        read >> todo.id; 
+        read >> todo.id;
+        if (todo.id == NULL)
+        {
+            cout << "\n\tЗаметок нет!";
+            return;
+        } 
         read.ignore(); 
-        getline(read, todo.task); 
+        getline(read, todo.task);
+        read.ignore();
+        getline(read, todo.priority);
         print(todo); 
     }
     read.close();
@@ -99,7 +116,9 @@ int searchData() {
     while (!read.eof()) {
         read >> todo.id; 
         read.ignore(); 
-        getline(read, todo.task); 
+        getline(read, todo.task);
+        read.ignore();
+        getline(read, todo.priority); 
         if (todo.id == id) {
             print(todo); 
             return id; 
@@ -129,14 +148,17 @@ void updateData() {
             read >> todo.id;
             read.ignore(); 
             getline(read, todo.task);
-            
+            read.ignore();
+            getline(read, todo.priority);
             if (todo.id != id) {
                 tempFile << "\n" << todo.id;
                 tempFile << "\n" << todo.task;
+                tempFile << "\n " << todo.priority;
             }
             else {
                 tempFile << "\n"<< todo.id;
                 tempFile << "\n"<< newData.task;
+                tempFile << "\n " << todo.priority;
             }
         }
         read.close(); 
@@ -153,3 +175,139 @@ void updateData() {
 void exit_program() {
     exit(0);
 }
+
+void updatePriority()
+{
+    int id = searchData(); 
+    cout << "\n\tХотите изменить приоритет заметки? (д/н) : ";
+    string ch;
+    cin >> ch;
+    if (ch == "д") {
+        cout << "\n\tУкажите приоритет : ";
+        todo newData; 
+        cin.get(); 
+        getline(cin, newData.priority); 
+        
+        todo todo;
+        ofstream tempFile;
+        tempFile.open(temp_output); 
+        ifstream read;
+        read.open(output); 
+        
+        while (!read.eof()) {
+            read >> todo.id;
+            read.ignore(); 
+            getline(read, todo.task);
+            read.ignore();
+            getline(read, todo.priority);
+            if (todo.id != id) {
+                tempFile << "\n" << todo.id;
+                tempFile << "\n" << todo.task;
+                tempFile << "\n " << todo.priority;
+            }
+            else {
+                tempFile << "\n"<< todo.id;
+                tempFile << "\n"<< todo.task;
+                tempFile << "\n " << newData.priority;
+            }
+        }
+        read.close(); 
+        tempFile.close();
+        remove(output);
+        rename(temp_output, output); 
+        cout << "\n\tПриоритет изменён!";
+    }
+    else {
+        cout << "\n\tПриоритет не изменён!";
+    }
+}
+
+void clearAllData()
+{
+    remove(output);
+    remove("id.txt");
+}
+
+void deltodo()
+{
+    int id = searchData(); 
+    cout << "\n\tХотите удалить эту заметку? (д/н) : ";
+    string ch;
+    cin >> ch;
+    if (ch == "д") {
+        todo todo;
+        ofstream tempFile;
+        tempFile.open(temp_output); 
+        ifstream read;
+        read.open(output); 
+        
+        while (!read.eof()) {
+            read >> todo.id;
+            read.ignore(); 
+            getline(read, todo.task);
+            read.ignore();
+            getline(read, todo.priority);
+            if (todo.id != id) {
+                tempFile << "\n" << todo.id;
+                tempFile << "\n" << todo.task;
+                tempFile << "\n " << todo.priority;
+            }
+        }
+        read.close(); 
+        tempFile.close();
+        remove(output);
+        rename(temp_output, output); 
+        cout << "\n\tЗаметка удалена!";
+    }
+    else {
+        cout << "\n\tЗаметка не удалена!";
+    }
+}
+
+void startMenu()
+{
+     while (true) {
+        cout << endl << endl;
+        cout << "\n\t1.Добавить заметку";
+        cout << "\n\t2.Просмотреть заметки";
+        cout << "\n\t3.Изменить заметку";
+        cout << "\n\t4.Удалить заметку";
+        cout << "\n\t5.Удалить все заметки";
+        cout << "\n\t6.Изменить приоритет заметки";
+        cout << "\n\t0.Выход";
+
+        int choice;
+        cout << "\n\tЧто хотите сделать?  ";
+        cin >> choice;
+        switch (choice) {
+        case 1:
+            header (2);
+            addtodo();
+            break;
+        case 2:
+            header (4);
+            readData();
+            break;
+        case 3:
+            header (3);
+            updateData();
+            break;
+        case 4:
+            header (3);
+            deltodo();
+            break;
+        case 5:
+            header(4);
+            clearAllData();
+            break;
+        case 6:
+            header (3);
+            updatePriority();
+            break;
+        case 0:
+            exit_program();
+            break;
+        }
+    }
+}
+
