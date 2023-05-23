@@ -1,12 +1,10 @@
 #include "../functions/functions.h"
 
-int ID;
-
 int main() {
     setlocale (LC_ALL, "rus");
     header (0);
 
-    ifstream read; 
+ /*   ifstream read; 
     read.open("id.txt"); 
 
     if (!read.fail()) { 
@@ -16,6 +14,6 @@ int main() {
         ID = 0;
     }
     read.close(); 
-
+*/
     startMenu();
 }
