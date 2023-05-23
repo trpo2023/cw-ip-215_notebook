@@ -1,5 +1,4 @@
 #include "functions.h"
-extern int ID;
 
 const char* output = "todo.txt";
 const char* temp_output = "temp.txt";
@@ -51,6 +50,7 @@ void addtodo_user_choice () {
 
 
 void addtodo() {
+    int ID = lastID();
     string ch = "д";
     while (ch == "д")
     {
@@ -124,7 +124,7 @@ int searchData() {
             return id; 
         }
     }
-    return EXIT_CODE;
+    return -1;
 }
 
 void updateData() {
@@ -262,6 +262,19 @@ void deltodo()
     else {
         cout << "\n\tЗаметка не удалена!";
     }
+}
+
+int lastID()
+{
+    int ID = 0;
+    ifstream read; 
+    read.open("id.txt"); 
+
+    if (!read.fail()) { 
+        read >> ID; 
+    }
+    read.close();
+    return ID;
 }
 
 void startMenu()

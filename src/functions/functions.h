@@ -6,9 +6,9 @@
 
 using namespace std;
 
-constexpr int EXIT_CODE = -1;
+//constexpr int EXIT_CODE = -1;
 
-extern int ID;
+//extern int ID;
 
 struct todo {
     int id;
@@ -27,3 +27,4 @@ void deltodo();
 void updatePriority();
 void clearAllData();
 void startMenu();
+int lastID();
