@@ -21,7 +21,7 @@ void addtodo();
 void print (todo s);
 int searchData();
 void readData();
-void updateData(string);
+void updateData();
 void exit_program();
 void deltodo();
 void updatePriority();

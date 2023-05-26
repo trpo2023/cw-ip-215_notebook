@@ -1,41 +1,75 @@
-# Компилятор и флаги компиляции
-CPP := g++
-CPPFLAGS := -Wall -Wextra -pedantic -g -I src/functions
+APP_NAME = todo
+LIB_NAME = functions
+TEST_NAME = main-test
 
-# Список исходных файлов
-SRC := $(wildcard src/todo/*.cpp) $(wildcard src/functions/*.cpp) $(wildcard src/thirdparty/*.cpp)
+CC = g++
 
-# Создание файлов объектного кода
-OBJ := $(src/todo/%.cpp=src/todo/%.o) $(src/functions/%.cpp=src/functions/%.o) $(src/thirdparty/%.cpp=src/thirdparty/%.o)
+CPPFLAGS = -I src -I thirdparty 
+CPPFLAGS_TEST = -I src -I thirdparty
 
-# Сборка исполняемого файла
-all: obj/src/todo/main.exe
-test: obj/src/thirdparty/main-test.exe
+BIN_DIR = bin
+OBJ_DIR = obj
+SRC_DIR = src
+TEST_DIR = src/thirdparty
 
-src/todo/main.exe: src/todo/main.o src/functions/functions.o
-	g++ -o src/todo/main.exe src/todo/main.o src/functions/functions.o
+APP_PATH = $(BIN_DIR)/$(APP_NAME)
+LIB_PATH = $(OBJ_DIR)/$(SRC_DIR)/$(LIB_NAME)/$(LIB_NAME).a
+TEST_PATH = $(BIN_DIR)/$(TEST_NAME)
+TEST_OBJ_PATH = $(OBJ_DIR)/$(TEST_DIR)
 
-src/thirdparty/main-test.exe: src/thirdparty/main-test.o src/functions/functions.o
-	g++ -o src/thirdparty/main-test.exe src/thirdparty/main-test.o src/thirdparty/ctest.o src/functions/functions.o
+SRC_EXT = cpp
+APP_RUN = $(BIN_DIR)/$(APP_NAME)
+TEST_CHECK = $(BIN_DIR)/$(TEST_NAME)
 
-# Компиляция исходного кода в объектные файлы
-src/thirdparty/main-test.o: src/thirdparty/main-test.cpp
-	g++ -c -o src/thirdparty/main-test.o src/thirdparty/main-test.cpp
+APP_SOURCES = $(shell find $(SRC_DIR)/$(APP_NAME) -name '*.$(SRC_EXT)')
+APP_OBJECTS = $(APP_SOURCES:$(SRC_DIR)/%.$(SRC_EXT)=$(OBJ_DIR)/$(SRC_DIR)/%.o)
 
-src/thirdparty/ctest.o: src/thirdparty/main-test.cpp src/thirdparty/ctest.h
-	g++ -c -o src/thirdparty/ctest.o src/thirdparty/ctest.cpp
+LIB_SOURCES = $(shell find $(SRC_DIR)/$(LIB_NAME) -name '*.$(SRC_EXT)')
+LIB_OBJECTS = $(LIB_SOURCES:$(SRC_DIR)/%.$(SRC_EXT)=$(OBJ_DIR)/$(SRC_DIR)/%.o)
 
-src/todo/main.o: src/todo/main.cpp
-	g++ -c -o src/todo/main.o src/todo/main.cpp
+TEST_SOURCES = $(shell find $(TEST_DIR) -name '*.$(SRC_EXT)')
+TEST_OBJECTS = $(TEST_SOURCES:$(TEST_DIR)/%.$(SRC_EXT)=$(OBJ_DIR)/$(TEST_DIR)/%.o)
 
-src/functions/functions.o: src/functions/functions.cpp src/functions/functions.h
-	g++ -c -o src/functions/functions.o src/functions/functions.cpp
+DEPS = $(APP_OBJECTS:.o=.d) $(LIB_OBJECTS:.o=.d)
 
-# Очистка
+.Shee: all
+all: $(APP_PATH)
+
+-include $(DEPS)
+
+$(APP_PATH): $(APP_OBJECTS) $(LIB_PATH)
+	$(CC) $(CPPFLAGS) $(CPPFLAGS) -o $@ $^
+
+$(LIB_PATH): $(LIB_OBJECTS)
+	ar rcs $@ $^
+
+$(OBJ_DIR)/%.o: %.cpp
+	$(CC) $(CPPFLAGS) $(CPPFLAGS) $(CPPFLAGS_TEST) -c $< -o $@
+
+.Shee: test_comp
+test_comp: $(TEST_PATH)
+
+$(TEST_PATH): $(TEST_OBJECTS) $(LIB_PATH)
+	$(CC) $(CPPFLAGS) $(CPPFLAGS) -o $@ $^ 
+
+.Shee: clean
 clean:
-	rm src/functions/*.o src/todo/*.o src/thirdparty/*.o *.o *.txt
+	rm -f $(APP_PATH) $(TEST_PATH) $(LIB_PATH) 
+	rm -rf $(DEPS) $(APP_OBJECTS) $(LIB_OBJECTS)
+	rm -rf $(TEST_OBJ_PATH)/*.*
+	rm -rf *.txt
+  
+.Shee: run
+run: $(APP_RUN)
+	$(APP_RUN)
 
-.PHONY: all clean
+.Shee: test_show
+testing: $(TEST_CHECK)
+	$(TEST_CHECK)
 
-run: obj/src/todo/main.exe
-	./obj/src/todo/main.exe
+.Shee: start
+start:
+	make clean
+	make
+	make test_comp
+	make testing

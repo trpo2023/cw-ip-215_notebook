@@ -63,8 +63,8 @@ void addtodo() {
         ofstream write;
         write.open(output, ios::app);
         write << "\n" << ID;
-        write << "\n" << todo.task ;
-        write << "\n" << " не определён";
+        write << "\n " << todo.task ;
+        write << "\n" << "не определён";
         write.close();
 
         write.open("id.txt");
@@ -74,15 +74,12 @@ void addtodo() {
         cout << "Хотите добавить ещё? (д/н)" << endl;
         cin >> ch;
     }
-
-    /*addtodo_user_choice ();*/
 }
 
 
 void print(todo s) {
-    cout << "\n\t" << s.id << "." << s.task << "\n\tПриоритет: " << s.priority;
+    cout << "\n\t" << s.id << ". " << s.task << "\n\tПриоритет: " << s.priority;
 }
-
 
 void readData() {
     todo todo;
