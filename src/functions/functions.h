@@ -17,14 +17,14 @@ struct todo {
 };
 
 void header (int n);
-void addtodo();
+void addtodo(int ID, string task);
 void print (todo s);
 int searchData();
 void readData();
-void updateData();
+void updateData(int ID, string task);
 void exit_program();
-void deltodo();
-void updatePriority();
+void deltodo(int ID);
+void updatePriority(int ID, string priority);
 void clearAllData();
 void startMenu();
 int lastID();

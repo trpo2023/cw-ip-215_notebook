@@ -3,7 +3,8 @@
 
 CTEST(addtodo, test_addtodo){
     int ID = lastID();
-    addtodo();
+    string task = "Обновлённый текст";
+    addtodo(ID,task);
     int result = lastID();
     ASSERT_EQUAL(ID + 1, result);
 }
@@ -20,7 +21,9 @@ CTEST(updateData,test_updateData)
         ofs << str << '\n';
     ifs.close();
     ofs.close();
-    updateData();
+    int ID = 1;
+    string task = "Обновлённый текст";
+    updateData(ID,task);
     ifs.open("todo.txt");
     ifs2.open("todo_temp.txt");
     while(result == 1 && std::getline(ifs,str))
@@ -45,7 +48,9 @@ CTEST(updatePriority,test_updatePriority)
         ofs << str << '\n';
     ifs.close();
     ofs.close();
-    updatePriority();
+    int ID = 1;
+    string task = "Высокий";
+    updatePriority(ID,task);
     ifs.open("todo.txt");
     ifs2.open("todo_temp.txt");
     while(result == 1 && std::getline(ifs2,str2))
@@ -70,7 +75,8 @@ CTEST(deltodo,test_deltodo)
         ofs << str << '\n';
     ifs.close();
     ofs.close();
-    deltodo();
+    int ID = 1;
+    deltodo(ID);
     ifs.open("todo.txt");
     ifs2.open("todo_temp.txt");
     while(result == 1 && std::getline(ifs2,str2))
