@@ -22,7 +22,7 @@ CTEST(updateData,test_updateData)
     ifs.close();
     ofs.close();
     int ID = 1;
-    string task = "Обновлённый текст";
+    string task = "обновлённый текст";
     updateData(ID,task);
     ifs.open("todo.txt");
     ifs2.open("todo_temp.txt");
@@ -49,7 +49,7 @@ CTEST(updatePriority,test_updatePriority)
     ifs.close();
     ofs.close();
     int ID = 1;
-    string task = "Высокий";
+    string task = "высокий";
     updatePriority(ID,task);
     ifs.open("todo.txt");
     ifs2.open("todo_temp.txt");
