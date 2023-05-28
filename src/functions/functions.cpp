@@ -64,7 +64,7 @@ void addtodo(int ID, string task) {
         write.open(output, ios::app);
         write << "\n" << ID;
         write << "\n " << task ;
-        write << "\n" << "не определён";
+        write << "\n " << "не определён";
         write.close();
 
         write.open("id.txt");
@@ -149,13 +149,13 @@ void updateData(int ID, string task) {
             getline(read, todo.priority);
             if (todo.id != ID) {
                 tempFile << "\n" << todo.id;
-                tempFile << "\n" << todo.task;
+                tempFile << "\n " << todo.task;
                 tempFile << "\n " << todo.priority;
             }
             else {
                 tempFile << "\n"<< todo.id;
                 //tempFile << "\n"<< newData.task;
-                tempFile << "\n"<< task;
+                tempFile << "\n "<< task;
                 tempFile << "\n " << todo.priority;
             }
         }
@@ -200,12 +200,12 @@ void updatePriority(int ID, string priority)
             getline(read, todo.priority);
             if (todo.id != ID) {
                 tempFile << "\n" << todo.id;
-                tempFile << "\n" << todo.task;
+                tempFile << "\n " << todo.task;
                 tempFile << "\n " << todo.priority;
             }
             else {
                 tempFile << "\n"<< todo.id;
-                tempFile << "\n"<< todo.task;
+                tempFile << "\n "<< todo.task;
                 //tempFile << "\n " << newData.priority;
                 tempFile << "\n " << priority;
             }
@@ -248,7 +248,7 @@ void deltodo(int ID)
             getline(read, todo.priority);
             if (todo.id != ID) {
                 tempFile << "\n" << todo.id;
-                tempFile << "\n" << todo.task;
+                tempFile << "\n " << todo.task;
                 tempFile << "\n " << todo.priority;
             }
         }

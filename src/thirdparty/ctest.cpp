@@ -4,7 +4,7 @@
 CTEST(addtodo, test_addtodo){
     int ID = lastID();
     string task = "Обновлённый текст";
-    addtodo(ID,task);
+    addtodo(ID+1,task);
     int result = lastID();
     ASSERT_EQUAL(ID + 1, result);
 }
