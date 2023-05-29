@@ -32,7 +32,8 @@ TEST_OBJECTS = $(TEST_SOURCES:$(TEST_DIR)/%.$(SRC_EXT)=$(OBJ_DIR)/$(TEST_DIR)/%.
 
 DEPS = $(APP_OBJECTS:.o=.d) $(LIB_OBJECTS:.o=.d)
 
-.SUFFIXES: all
+
+
 all: $(APP_PATH)
 
 -include $(DEPS)
@@ -47,30 +48,19 @@ $(OBJ_DIR)/$(SRC_DIR)/%.o: $(SRC_DIR)/%.$(SRC_EXT)
 	mkdir -p $(@D)
 	$(CC) $(CPPFLAGS) -c $< -o $@
 
-.SUFFIXES: test_comp
 test_comp: $(TEST_PATH)
 
 $(TEST_PATH): $(TEST_OBJECTS) $(LIB_PATH)
 	$(CC) $(CPPFLAGS) -o $@ $^
 
-.SUFFIXES: clean
 clean:
 	rm -f $(APP_PATH) $(TEST_PATH) $(LIB_PATH)
 	rm -rf $(DEPS) $(APP_OBJECTS) $(LIB_OBJECTS)
 	rm -rf $(TEST_OBJ_PATH)/*.*
 	rm -rf *.txt
 
-.SUFFIXES: run
 run: $(APP_RUN)
 	$(APP_RUN)
 
-.SUFFIXES: test_show
-testing: $(TEST_CHECK)
+test: $(TEST_CHECK)
 	$(TEST_CHECK)
-
-.SUFFIXES: start
-start:
-	make clean
-	make all
-	make test_comp
-	make testing
