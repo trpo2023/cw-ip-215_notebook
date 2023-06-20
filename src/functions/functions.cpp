@@ -1,7 +1,7 @@
-#include "functions.h"
+#include <functions/functions.h>
 
-const char* output = "todo.txt";
-const char* temp_output = "temp.txt";
+static const char* output = "todo.txt";
+static const char* temp_output = "temp.txt";
 
 void header (int n) {
 	system("clear");
@@ -17,14 +17,6 @@ void header (int n) {
         cout << "\t\t\t|                      Ваш персональный ToDo List                        |" << endl;
         cout << "\t\t\t ------------------------------------------------------------------------" << endl << endl;
     }
-    /*if (n == 2) {
-        header (1);
-        cout << "\n\tВведите новую заметку: ";
-    }
-    if (n == 3) {
-        header (1);
-        cout << "\n\tВведите номер заметки: ";
-    }*/
     if (n == 4) {
         system("clear");
         cout << "\n\t\t\t---------------------------Текущие задачи-----------------------------\n";
@@ -32,34 +24,7 @@ void header (int n) {
 }
 
 
-/*void addtodo_user_choice () {
-    string ch;
-    cout << "Хотите добавить ещё? (д/н)" << endl;
-    cin >> ch;
-
-    if(ch == "д" or "да"){
-        header (2);
-        addtodo();
-    }
-    else
-    {
-        cout << "\n\tЗаметка добавлена!";
-        return;
-    }
-}*/
-
-
 void addtodo(int ID, string task) {
-    //int ID = lastID();
-    //string ch = "д";
-    //while (ch == "д")
-    //{
-        //header (2);
-        //todo todo;
-        //cin.get();
-        //getline(cin, todo.task); 
-        //ID++; 
-
         ofstream write;
         write.open(output, ios::app);
         write << "\n" << ID;
@@ -70,10 +35,6 @@ void addtodo(int ID, string task) {
         write.open("id.txt");
         write << ID;
         write.close();
-
-        //cout << "Хотите добавить ещё? (д/н)" << endl;
-        //cin >> ch;
-    //}
 }
 
 
@@ -125,16 +86,6 @@ int searchData() {
 }
 
 void updateData(int ID, string task) {
-    //int id = searchData(); 
-    //cout << "\n\tХотите изменить эту заметку? (д/н) : ";
-    //string ch;
-    //cin >> ch;
-    //if (ch == "д") {
-      //  cout << "\n\tВведите новую заметку : ";
-        //todo newData; 
-        //cin.get(); 
-        //getline(cin, newData.task); 
-        
         todo todo;
         ofstream tempFile;
         tempFile.open(temp_output); 
@@ -163,29 +114,14 @@ void updateData(int ID, string task) {
         tempFile.close();
         remove(output);
         rename(temp_output, output); 
-        //cout << "\n\tЗаметка обновлена!";
-    //}
-    //else {
-    //    cout << "\n\tЗаметка не обновлена";
-   // }
 }
 
 void exit_program() {
     exit(0);
 }
 
-void updatePriority(int ID, string priority)
+/*void updatePriority(int ID, string priority)
 {
-    /*int id = searchData(); 
-    cout << "\n\tХотите изменить приоритет заметки? (д/н) : ";
-    string ch;
-    cin >> ch;
-    if (ch == "д") {
-        cout << "\n\tУкажите приоритет : ";
-        todo newData; 
-        cin.get(); 
-        getline(cin, newData.priority); */
-        
         todo todo;
         ofstream tempFile;
         tempFile.open(temp_output); 
@@ -206,7 +142,6 @@ void updatePriority(int ID, string priority)
             else {
                 tempFile << "\n"<< todo.id;
                 tempFile << "\n "<< todo.task;
-                //tempFile << "\n " << newData.priority;
                 tempFile << "\n " << priority;
             }
         }
@@ -214,11 +149,33 @@ void updatePriority(int ID, string priority)
         tempFile.close();
         remove(output);
         rename(temp_output, output); 
-       // cout << "\n\tПриоритет изменён!";
-    //}
-    //else {
-      //  cout << "\n\tПриоритет не изменён!";
-    //}
+}*/
+
+void updatePriority(int ID, string priority)
+{
+    todo todo;
+    ofstream tempFile;
+    ifstream read;
+    tempFile.open(temp_output);
+    read.open(output);
+
+    if (tempFile.is_open() && read.is_open()) {
+        while (read >> todo.id) {
+            read.ignore();
+            getline(read, todo.task);
+            getline(read, todo.priority);
+            if (todo.id == ID) {
+                todo.priority = priority;
+            }
+            tempFile << todo.id << "\n" << todo.task << "\n" << todo.priority << "\n";
+        }
+        read.close();
+        tempFile.close();
+        remove(output);
+        rename(temp_output, output);
+    } else {
+        cout << "Failed to open files for reading and writing." << endl;
+    }
 }
 
 void clearAllData()
@@ -229,11 +186,6 @@ void clearAllData()
 
 void deltodo(int ID)
 {
-    //int id = searchData(); 
-    //cout << "\n\tХотите удалить эту заметку? (д/н) : ";
-    //string ch;
-    //cin >> ch;
-    //if (ch == "д") {
         todo todo;
         ofstream tempFile;
         tempFile.open(temp_output); 
@@ -256,11 +208,6 @@ void deltodo(int ID)
         tempFile.close();
         remove(output);
         rename(temp_output, output); 
-        //cout << "\n\tЗаметка удалена!";
-    //}
-    //else {
-      //  cout << "\n\tЗаметка не удалена!";
-    //}
 }
 
 int lastID()

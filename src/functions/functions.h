@@ -1,3 +1,6 @@
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -7,7 +10,6 @@
 using namespace std;
 
 //constexpr int EXIT_CODE = -1;
-
 //extern int ID;
 
 struct todo {
@@ -28,3 +30,5 @@ void updatePriority(int ID, string priority);
 void clearAllData();
 void startMenu();
 int lastID();
+
+#endif
