@@ -9,8 +9,25 @@ CTEST(addtodo, test_addtodo){
     string task = "Обновлённый текст";
     int new_id = last_ID + 1;
     addtodo(new_id, task);
-    int result = lastID();
-    ASSERT_EQUAL(new_id, result);
+    
+    ifstream read;
+    read.open(output);
+    bool found = false;
+    while (!read.eof()) {
+        int id;
+        string task, priority;
+        read >> id;
+        read.ignore();
+        getline(read, task);
+        getline(read, priority);
+        if (id == new_id && task.find("Обновлённый текст") != string::npos) {
+            found = true;
+            break;
+        }
+    }
+    read.close();
+    
+    ASSERT_TRUE(found);
 }
 
 CTEST(updateData,test_updateData)
